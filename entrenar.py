@@ -201,7 +201,7 @@ iniciar2agentes()
 
 #cargar()
 
-entrenar(5000)
+#entrenar()
 
 #entrenar_singuardar(100)
 
@@ -213,4 +213,4 @@ entrenar(5000)
 
 #11000 iteraciones   
 
-#ver()
+ver()
