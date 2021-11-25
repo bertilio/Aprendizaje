@@ -32,7 +32,7 @@ class agente:
         archivo = open(archivo+'.pickle','wb')
         array = [self.iteracion,self.estados]
         pickle.dump(array,archivo)
-        file = m.upload('myfile.doc')
+        file = m.upload(archivo+'.pickle')
         print(m.get_upload_link(file))
         archivo.close()
 
