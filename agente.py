@@ -3,6 +3,7 @@ from itertools import groupby, chain
 import math
 import pickle
 import random
+from mega import Mega
 
 NONE = '.'
 
@@ -10,6 +11,10 @@ parametro_r = [0.7]
 parametro_v = [0.5]
 parametro_E = [0.8]
 iteracion = [0]
+
+mega = Mega()
+m = mega.login("albertovicentedelegido@gmail.com", "USOCw8KsCIO")
+
 
 class agente:
 
@@ -27,6 +32,8 @@ class agente:
         archivo = open(archivo+'.pickle','wb')
         array = [self.iteracion,self.estados]
         pickle.dump(array,archivo)
+        file = m.upload('myfile.doc')
+        print(m.get_upload_link(file))
         archivo.close()
 
     def actualizarQs(self):
