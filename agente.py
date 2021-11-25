@@ -27,12 +27,12 @@ class agente:
         self.iteracion = iteracion
         self.color = color
 
-    def guardar(self,archivo): 
-
-        archivo = open(archivo+'.pickle','wb')
+    def guardar(self,name): 
+        
+        archivo = open(name+'.pickle','wb')
         array = [self.iteracion,self.estados]
         pickle.dump(array,archivo)
-        file = m.upload(archivo+'.pickle')
+        file = m.upload(name+'.pickle')
         print(m.get_upload_link(file))
         archivo.close()
 
