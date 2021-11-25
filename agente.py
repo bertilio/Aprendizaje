@@ -225,9 +225,6 @@ class agente:
 
         indice = acciones.index(elegido[0])
 
-        for h in hijos:
-            print(h.q)
-
         #print("Q DEL ESTADO ELEGIDO: ",hijos[indice].q)
         
 
