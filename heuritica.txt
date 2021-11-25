@@ -1,0 +1,70 @@
+cadena : fichas consecutivas > 1
+
+2 
+
+va ganando el que tiene la cadena abierta mas larga
+
+e1 = longitud mi cadena abierta mas larga - longitud de la cadena abierta mas larga del contrario
+
+va ganando el que mas posibles cadenas tiene
+
+las posibles cadenas son las casillas adyacentes a una ficha que se podrian llenar de 1 movimiento
+
+e2 = posibles cadenas mias - posibles cadenas del adversario
+
+e1 = 2 - 3
+
+e2 = 6 - 4
+
+e = e1 + e2 = -1 +2 = 1 
+
+por cada linea caben longitud de la linea / n+1
+
+cuantas lineas tenemos
+
+6 filas + 7 columnas + 12 diagonales
+
+n de 2 fichas
+
+fila = 7 / 3 = 2 = columna
+
+
+diagonales
+
+
+4 = 4
+5 = 4
+6 = 8
+7 = 4
+
+n = 24
+
+
+n de 3 fichas
+
+fila = 7 / 4 = 1 = columnas
+
+diagonales
+
+
+5 = 4
+6 = 4
+7 = 4
+
+n = 14
+
+
+factor entre 2 y 3 fichas
+
+7/12
+
+nueva e1 = mis cadenas de 3 + mis cadenas de 2 por el factor - las tuyas
+
+e = mis cadenas de 3 + mis cadenas de 2 por el factor - las tuyas + posibles cadenas mias - posibles cadenas del adversario
+
+e = 0 + 7/12 + 7 - 1 - 21/12 - 3 = 1.83
+
+ganar = 5 puntos
+
+
+
