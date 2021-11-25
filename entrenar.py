@@ -201,7 +201,7 @@ iniciar2agentes()
 
 #cargar()
 
-entrenar(100)
+entrenar(100000)
 
 #entrenar_singuardar(100)
 
