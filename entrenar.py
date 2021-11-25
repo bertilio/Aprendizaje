@@ -201,9 +201,9 @@ iniciar2agentes()
 
 #cargar()
 
-#entrenar()
+entrenar(100)
 
-entrenar_singuardar(100)
+#entrenar_singuardar(100)
 
 #partidatrucada()
 
