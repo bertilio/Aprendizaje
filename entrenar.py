@@ -203,7 +203,7 @@ iniciar2agentes()
 
 #entrenar()
 
-#entrenar_singuardar(100)
+entrenar_singuardar(100)
 
 #partidatrucada()
 
@@ -213,4 +213,4 @@ iniciar2agentes()
 
 #11000 iteraciones   
 
-ver()
+#ver()
