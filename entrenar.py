@@ -199,7 +199,7 @@ def partidavsIA():
 
 iniciar2agentes()
 
-cargar()
+#cargar()
 
 entrenar(5000)
 
@@ -213,4 +213,4 @@ entrenar(5000)
 
 #11000 iteraciones   
 
-ver()
+#ver()
