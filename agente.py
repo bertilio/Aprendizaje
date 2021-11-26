@@ -3,7 +3,9 @@ from itertools import groupby, chain
 import math
 import pickle
 import random
-from mega import Mega
+#from mega import Mega
+import threading
+from os import remove
 
 NONE = '.'
 
@@ -12,8 +14,8 @@ parametro_v = [0.5]
 parametro_E = [0.8]
 iteracion = [0]
 
-mega = Mega()
-m = mega.login("albertovicentedelegido@gmail.com", "USOCw8KsCIO")
+#mega = Mega()
+#m = mega.login("albertovicentedelegido@gmail.com", "USOCw8KsCIO")
 
 
 class agente:
@@ -27,14 +29,20 @@ class agente:
         self.iteracion = iteracion
         self.color = color
 
+
+    def hilos(self):
+        cero = estados[0]
+        hijos = cero.gethijos()
+
     def guardar(self,name): 
         
         archivo = open(name+'.pickle','wb')
         array = [self.iteracion,self.estados]
-        pickle.dump(array,archivo)
-        file = m.upload(name+'.pickle')
+        #pickle.dump(array,archivo)
+        #file = m.upload(name+'.pickle')
         print(m.get_upload_link(file))
         archivo.close()
+        remove(name+'.pickle')
 
     def actualizarQs(self):
         self.estados[0].setQ()
