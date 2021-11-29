@@ -51,7 +51,8 @@ class agente:
         archivo = open(archivo+'.pickle','rb')
         array = pickle.load(archivo)
         self.iteracion = array[0] 
-        self.estados = array[1] 
+        self.estados = array[1]
+        archivo.close()
         remove(name+'.pickle')
     
     def existe(self,tablero):
