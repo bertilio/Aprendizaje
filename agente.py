@@ -47,12 +47,12 @@ class agente:
         self.estados[0].setQ()
 
     def cargar(self,archivo):
-
+        name = archivo
         archivo = open(archivo+'.pickle','rb')
         array = pickle.load(archivo)
         self.iteracion = array[0] 
         self.estados = array[1] 
-        remove(archivo+'.pickle')
+        remove(name+'.pickle')
     
     def existe(self,tablero):
         for estado in self.estados:
