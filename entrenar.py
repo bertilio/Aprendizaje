@@ -199,9 +199,9 @@ def partidavsIA():
 
 iniciar2agentes()
 
-cargar()
+#cargar()
 
-entrenar(10000)
+entrenar(30000)
 
 #entrenar_singuardar(100)
 
