@@ -199,9 +199,9 @@ def partidavsIA():
 
 iniciar2agentes()
 
-#cargar()
+cargar()
 
-entrenar(20000)
+entrenar(10000)
 
 #entrenar_singuardar(100)
 
@@ -211,6 +211,6 @@ entrenar(20000)
 
 #print(len(a.estados))
 
-#11000 iteraciones   
+#30000 iteraciones   
 
 #ver()
