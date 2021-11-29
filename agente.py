@@ -3,7 +3,7 @@ from itertools import groupby, chain
 import math
 import pickle
 import random
-#from mega import Mega
+from mega import Mega
 import threading
 from os import remove
 
