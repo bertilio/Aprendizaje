@@ -218,7 +218,7 @@ class agente:
                 hijos.append(next(iterador)) #Se guarda el hijo ya guardado
 
 
-        factor = 0.01
+        factor = 1
 
         qtotal = 0
 
