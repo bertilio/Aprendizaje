@@ -122,6 +122,9 @@ def entrenar(n):
         print('-------------------')
         print("NUEVOS ESTADOS: ",ne)
         print('-------------------')
+        print('-------------------')
+        print("ESTADOS TOTALES: ",len(a.estados))
+        print('-------------------')
 
     final = time.time()  
 
