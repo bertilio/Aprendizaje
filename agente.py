@@ -126,6 +126,9 @@ class agente:
                 if booleanos[i]==False:
                     añadir.append(lista[i])
 
+        if len(añadir) == 0:
+            lista[0].cambiar()
+
         lista[0].q = recompensa
 
         añadir.reverse()
@@ -218,7 +221,7 @@ class agente:
                 hijos.append(next(iterador)) #Se guarda el hijo ya guardado
 
 
-        factor = 1
+        factor = 0.01
 
         qtotal = 0
 
@@ -343,8 +346,8 @@ class Estado:
             hijos = self.getHijos()
             if (len(hijos) > 0):
 
-                if hijos[0].q == 0:
-                    hijos[0].setQ()
+
+                hijos[0].setQ()
 
                 q_hijos = hijos[0].q
                 for hijo in hijos:
