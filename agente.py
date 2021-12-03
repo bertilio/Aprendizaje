@@ -148,11 +148,11 @@ class agente:
 
     def recompensa(self,ganador ):
         if ganador == self.color:
-            return 10
+            return 1
         elif ganador == '.':
             return 0
         else:
-            return -10
+            return -1
 
     def politica_trucada(self):
 
