@@ -126,8 +126,6 @@ class agente:
                 if booleanos[i]==False:
                     añadir.append(lista[i])
 
-        if len(añadir) == 0:
-            lista[0].cambiar()
 
         lista[0].q = recompensa
 
@@ -150,11 +148,11 @@ class agente:
 
     def recompensa(self,ganador ):
         if ganador == self.color:
-            return 1
+            return 10
         elif ganador == '.':
             return 0
         else:
-            return -1
+            return -10
 
     def politica_trucada(self):
 
