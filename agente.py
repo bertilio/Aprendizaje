@@ -278,7 +278,7 @@ class agente:
 class Estado:
 
     def __init__(self, tablero, g,estados):
-        self.padre = []
+        self.padres = []
         self.tablero = tablero
         self.q = 0
         self.generacion = g
