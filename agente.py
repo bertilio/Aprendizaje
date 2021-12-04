@@ -150,7 +150,7 @@ class agente:
         if ganador == self.color:
             return 1
         elif ganador == '.':
-            return 0
+            return 0.1
         else:
             return -1
 
@@ -350,8 +350,7 @@ class Estado:
                 q_hijos = hijos[0].q
                 for hijo in hijos:
                     
-                    if hijo.q == 0:
-                        hijo.setQ()
+                    hijo.setQ()
                     q_h = hijo.q
                     if q_hijos < q_h:
                         q_hijos = q_h
