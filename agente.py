@@ -122,6 +122,12 @@ class agente:
 
 
                     añadir.append(lista[i])
+                    #SI EL SIGUIENTE ESTADO YA EXISTE (QUE EN ESTE CASO ES EL ANTERIOR EN LA LISTA PORQUE ESTA DEL REVES) TENEMOS QUE INDICAR QUE ES HIJO
+                    if i > 0 :
+                        if booleanos[i-1] == True:
+                            lista[i].setHijo(lista[i-1])
+                            lista[i-1].setPadre(lista[i])
+
             else:
                 if booleanos[i]==False:
                     añadir.append(lista[i])
@@ -272,7 +278,7 @@ class agente:
 class Estado:
 
     def __init__(self, tablero, g,estados):
-        self.padre = False
+        self.padre = []
         self.tablero = tablero
         self.q = 0
         self.generacion = g
@@ -288,7 +294,8 @@ class Estado:
         return res
 
     def setPadre(self, padre):
-        self.padre = padre
+        self.padres.append(padre)
+        padre.setHijo(self)
 
     def setHijo(self,hijo):
         self.hijos.append(hijo)
@@ -296,8 +303,8 @@ class Estado:
 
     def cambiar(self):
         self.cambios = True
-        if self.padre:
-            self.padre.cambiar()
+        for padre in self.padres:
+            padre.cambiar()
     
     def imprimir(self):
         print()
