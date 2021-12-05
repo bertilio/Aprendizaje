@@ -6,6 +6,7 @@ import random
 from mega import Mega
 import threading
 from os import remove
+import sys
 
 NONE = '.'
 
@@ -38,6 +39,7 @@ class agente:
         
         archivo = open(name+'.pickle','wb')
         array = [self.iteracion,self.estados]
+        sys.setrecursionlimit(10000)
         pickle.dump(array,archivo)
         file = m.upload(name+'.pickle')
         print(m.get_upload_link(file))

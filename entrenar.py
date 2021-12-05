@@ -2,6 +2,7 @@
 from juego import partida2, Game , partida3 , partida4 , partidaVer
 from itertools import groupby, chain
 from agente import agente
+from red import red
 import math
 import random
 import time
@@ -122,9 +123,6 @@ def entrenar(n):
         print('-------------------')
         print("NUEVOS ESTADOS: ",ne)
         print('-------------------')
-        print('-------------------')
-        print("ESTADOS TOTALES: ",len(a.estados))
-        print('-------------------')
 
     final = time.time()  
 
@@ -150,8 +148,9 @@ def cargar():
     a.cargar("agente1")
     a2.cargar("agente2")    
 
-def ver():
+def ver(red):
     g = Game()
+    a.setRed(red)
     partidaVer(1, g, a, a2)
 
 def partidatrucada():
@@ -165,36 +164,22 @@ def partidatrucada():
     pasos = g.pasos
     
 
-    r = a2.recompensa(ganador)
-    a2.actualizar(pasos, r)
+    r = a.recompensa(ganador)
+    a.actualizar(pasos, r)
 
-
+    """
     for estado in a2.estados:
         estado.imprimir()
-
+    """
     
 
 def partidavsIA():
 
     g = Game()
+    a.setRed(red)
+    partida2(1, g, a)
 
-    partida2(1, g, a2)
-
-
-    ganador = g.ganador
-    color = 'R'
-    pasos = g.pasos
         
-
-    r = a2.recompensa(ganador)
-    a2.actualizar(pasos, r)
-
-    print(len(a.estados))
-
-
-    for estado in a2.estados:
-        estado.setQ()
-        estado.imprimir()
     
 
 
@@ -209,11 +194,55 @@ entrenar(20000)
 #entrenar_singuardar(100)
 
 #partidatrucada()
+#partidatrucada()
 
-#partidavsIA()
+
 
 #print(len(a.estados))
 
-#30000 iteraciones   
+#20000 iteraciones   
 
-#ver()
+#print(len(a.estados))
+  
+
+
+
+#RED NEURONAL APROXIMAR QS
+
+red = red(1,a)
+
+red.introducir()
+
+
+red.entrenar(1000)
+
+red.guardar()
+
+#red.cargar()
+"""
+partida = 0
+
+for i in range(len(a.estados)):
+
+    if partida == 10:
+        a.estados[i].imprimir()
+
+    if (a.estados[i].q == -1) or (a.estados[i].q == 1):
+        partida = partida +1
+       
+
+
+
+
+for e in a.estados:
+    e.imprimir()
+"""
+#estado.imprimir()
+
+
+
+
+
+#partidavsIA()
+
+#ver(red)
