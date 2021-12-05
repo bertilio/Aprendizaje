@@ -217,7 +217,7 @@ red.introducir()
 red.entrenar(1000)
 
 red.guardar()
-
+#ola
 #red.cargar()
 """
 partida = 0
