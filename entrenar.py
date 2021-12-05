@@ -2,7 +2,6 @@
 from juego import partida2, Game , partida3 , partida4 , partidaVer
 from itertools import groupby, chain
 from agente import agente
-from red import red
 import math
 import random
 import time
@@ -187,62 +186,6 @@ def partidavsIA():
 
 iniciar2agentes()
 
-#cargar()
-
 entrenar(20000)
 
-#entrenar_singuardar(100)
-
-#partidatrucada()
-#partidatrucada()
-
-
-
-#print(len(a.estados))
-
-#20000 iteraciones   
-
-#print(len(a.estados))
   
-
-
-
-#RED NEURONAL APROXIMAR QS
-
-red = red(1,a)
-
-red.introducir()
-
-
-red.entrenar(1000)
-
-red.guardar()
-
-#red.cargar()
-"""
-partida = 0
-
-for i in range(len(a.estados)):
-
-    if partida == 10:
-        a.estados[i].imprimir()
-
-    if (a.estados[i].q == -1) or (a.estados[i].q == 1):
-        partida = partida +1
-       
-
-
-
-
-for e in a.estados:
-    e.imprimir()
-"""
-#estado.imprimir()
-
-
-
-
-
-#partidavsIA()
-
-#ver(red)
