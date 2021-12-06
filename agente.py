@@ -39,7 +39,7 @@ class agente:
         
         archivo = open(name+'.pickle','wb')
         array = [self.iteracion,self.estados]
-        sys.setrecursionlimit(10000)
+        sys.setrecursionlimit(100000)
         pickle.dump(array,archivo)
         file = m.upload(name+'.pickle')
         print(m.get_upload_link(file))
