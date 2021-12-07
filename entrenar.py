@@ -186,6 +186,6 @@ def partidavsIA():
 
 iniciar2agentes()
 
-entrenar(10000)
+entrenar(20000)
 
   
