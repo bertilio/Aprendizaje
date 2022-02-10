@@ -1,7 +1,6 @@
 from itertools import groupby, chain
 from juego import TicTacToe
 from agente import agente
-from red import red
 import math
 import random
 import time
