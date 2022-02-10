@@ -1,191 +1,108 @@
-
-from juego import partida2, Game , partida3 , partida4 , partidaVer
 from itertools import groupby, chain
+from juego import TicTacToe
 from agente import agente
+from red import red
 import math
 import random
 import time
 import os
 
-a = agente('R');
-a2 = agente('Y');
-
-def iniciar2agentes():
-    a.color='R'
-    a2.color ='Y'
-
-def entrenar_singuardar(n):
-
-    victorias = 0
-    empates = 0
-    inicio = time.time()
-    ne=0
-    for i in range(n):
-
-        
-
-        print('-------------------')
-        print("ITERACION: ",a.iteracion[0])
-        print('-------------------')
-        g = Game()
-
-        b = len(a.estados)
-
-        partida3(1,g,a,a2)
-
-        ganador = g.ganador
-        color = 'R'
-        pasos = g.pasos
-        
-        if ganador == color:
-            victorias += 1
-        if ganador == '.':
-            empates += 1
-
-        r = a.recompensa(ganador)
-        a.actualizar(pasos, r)
-
-        r = a2.recompensa(ganador)
-        a2.actualizar(pasos, r)
-
-        a.iteracion[0] += 1
-
-        ne = len(a.estados) - b
-
-        print('-------------------')
-        print("PASOS: ",len(pasos))
-        print('-------------------')
-        print('-------------------')
-        print("NUEVOS ESTADOS: ",ne)
-        print('-------------------')
-
-    final = time.time()  
-
-
-    tiempo = final - inicio
-    print('-------------------')
-    print("TIEMPO POR 1000 PARTIDAS: ", tiempo)
-    print('-------------------')
-
-    print('-------------------')
-    print("VICTORIAS: ",victorias)
-    print('-------------------')
-    print("EMPATES: ",empates)
-    print('-------------------')
-    print("ESTADOS: ",len(a.estados))
-    print('-------------------')
 
 
 def entrenar(n):
 
-    victorias = 0
-    empates = 0
-    inicio = time.time()
-    ne=0
     for i in range(n):
 
-        
+        #partida
+        ganador,pasos = juego.start(False, a, a2)
 
-        print('-------------------')
-        print("ITERACION: ",a.iteracion[0])
-        print('-------------------')
-        g = Game()
-
-        b = len(a.estados)
-
-        partida3(1,g,a,a2)
-
-        ganador = g.ganador
-        color = 'R'
-        pasos = g.pasos
-        
-        if ganador == color:
-            victorias += 1
-        if ganador == '.':
-            empates += 1
-
-        r = a.recompensa(ganador)
-        a.actualizar(pasos, r)
-
-        r = a2.recompensa(ganador)
-        a2.actualizar(pasos, r)
+       #actualizar tabla q
+        a.actualizar(pasos,ganador)
+        a2.actualizar(pasos,ganador)
 
 
+        print("-------------------")
+        print("partida: " + str(a.iteracion))
+        print("-------------------")
+        print("estados: " + str(len(a.estados)))
+        print("-------------------")
+        print("|||||||||||||||||||")
 
-        a.iteracion[0] += 1
+        if (a.iteracion == 10) or (a.iteracion == 100) or (a.iteracion == 1000) or (a.iteracion == n):
+            string = "agenteX"
+            string += str(a.iteracion)
+            a.guardar(string)
+            string = "agenteO"
+            string += str(a2.iteracion)
+            a2.guardar(string)
 
-        ne = len(a.estados) - b
+def partida(ver, a1, a2):
 
-        print('-------------------')
-        print("PASOS: ",len(pasos))
-        print('-------------------')
-        print('-------------------')
-        print("NUEVOS ESTADOS: ",ne)
-        print('-------------------')
+    if a1 != "":
+        nombre = "agenteX" + a1
+        a = agente("X",juego)
+        a.cargar(nombre)
+    else:
+        a = False
 
-    final = time.time()  
-
-
-    tiempo = final - inicio
-    print('-------------------')
-    print("TIEMPO POR 1000 PARTIDAS: ", tiempo)
-    print('-------------------')
-
-    print('-------------------')
-    print("VICTORIAS: ",victorias)
-    print('-------------------')
-    print("EMPATES: ",empates)
-    print('-------------------')
-    print("ESTADOS: ",len(a.estados))
-    print('-------------------')
-
-    a.guardar("agente1")
-    a2.guardar("agente2")
-
-
-def cargar():
-    a.cargar("agente1")
-    a2.cargar("agente2")    
-
-def ver(red):
-    g = Game()
-    a.setRed(red)
-    partidaVer(1, g, a, a2)
-
-def partidatrucada():
-    print(a.color)
-    g = Game()
-
-    partida4(1, g, a2)
-
-
-    ganador = g.ganador
-    pasos = g.pasos
+    if a2 != "":
+        nombre = "agenteX" + a1
+        aDos = agente("O",juego)
+        aDos.cargar(nombre)
+    else:
+        aDos = False
     
+    ganador,pasos = juego.start(ver, a, aDos)
 
-    r = a.recompensa(ganador)
-    a.actualizar(pasos, r)
+def partidaEstadistica(n,ver, a1, a2):
 
-    """
-    for estado in a2.estados:
-        estado.imprimir()
-    """
+
+
+    if a1 != "":
+        nombre = "agenteX" + a1
+        a = agente("X",juego)
+        a.cargar(nombre)
+    else:
+        a = False
+
+    if a2 != "":
+        nombre = "agenteX" + a1
+        aDos = agente("O",juego)
+        aDos.cargar(nombre)
+    else:
+        aDos = False
+
+    ganaX = 0
+    ganaO = 0
+    empate = 0
     
+    for i in range(n):
 
-def partidavsIA():
+        print("-------------------")
+        print("partida: " + str(i+1))
+        print("-------------------")
 
-    g = Game()
-    a.setRed(red)
-    partida2(1, g, a)
+        ganador,pasos = juego.start(ver, a, aDos)
 
-        
-    
+        if ganador == "X":
+            ganaX +=1
+        elif ganador == "O":
+            ganaO +=1
+        else:
+            empate +=1
+
+    print("X ha ganado: " + str(ganaX) + "partidas")
+    print("O ha ganado: " + str(ganaO) + "partidas")
+    print("Empates: " + str(empate) + "partidas")
 
 
+juego = TicTacToe()
+a = agente("X",juego)
+a2 = agente("O",juego)
 
+a.cargar("agenteX1000")
+a2.cargar("agenteO1000")
 
-iniciar2agentes()
-
-entrenar(20000)
-
-  
+entrenar(9000)
+#partida(True, "1000", "10")
+#partidaEstadistica(1000,False,"1000","10")

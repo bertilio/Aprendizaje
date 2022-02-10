@@ -1,302 +1,277 @@
-#! /usr/bin/env python3
-from itertools import groupby, chain
+import random
+import copy
 import time
-import os
 
-NONE = '.'
-RED = 'R'
-YELLOW = 'Y'
+class TicTacToe:
 
-
-def diagonalsPos(matrix, cols, rows):
-    """Get positive diagonals, going from bottom-left to top-right."""
-    for di in ([(j, i - j) for j in range(cols)] for i in range(cols + rows - 1)):
-        yield [matrix[i][j] for i, j in di if i >= 0 and j >= 0 and i < cols and j < rows]
-
-
-def diagonalsNeg(matrix, cols, rows):
-    """Get negative diagonals, going from top-left to bottom-right."""
-    for di in ([(j, i - cols + j + 1) for j in range(cols)] for i in range(cols + rows - 1)):
-        yield [matrix[i][j] for i, j in di if i >= 0 and j >= 0 and i < cols and j < rows]
-
-
-class Game:
-    def __init__(self, cols=7, rows=6, requiredToWin=4):
-        """Create a new game."""
-        self.cols = cols
-        self.rows = rows
-        self.win = requiredToWin
-        self.board = [[NONE] * rows for _ in range(cols)]
-        self.ganador = ''
+    def __init__(self):
+        self.board = []
         self.pasos = []
 
-    def setGanador(self,g):
-        self.ganador = g
+    def create_board(self):
 
-    def insert(self, column, color):
-        """Insert the color in the given column."""
-        c = self.board[column]
-        if c[0] != NONE:
-            return False
+        self.board = []
 
-        i = -1
-        while c[i] != NONE:
-            i -= 1
-        c[i] = color
-        paso = []
-        for col in self.board:
-            paso.append(col.copy())
-        self.pasos.append(paso)
+        for i in range(3):
+            row = []
+            for j in range(3):
+                row.append('-')
+            self.board.append(row)
+        
+        self.pasos = []
+        self.guardarPaso()
+
+    def guardarPaso(self):
+        cadena = ""
+        for fila in self.board:
+            for columna in fila:
+                cadena += columna
+        self.pasos.append(cadena)
+
+
+    def get_random_first_player(self):
+        return random.randint(0, 1)
+
+    def fix_spot(self, row, col, player,real):
+        self.board[row][col] = player
+        if real:
+            self.guardarPaso()
+        
+    def getHijos(self,tablero):
+
+        indice = 0
+
+        for casilla in tablero:
+            self.board[indice//3][indice%3]=casilla
+            indice +=1
+
+        resultado = []
+        casillas = []
+
+        for i in range(3):
+            for j in range(3):
+                if self.board[i][j] == "-":
+                    casillas.append([i,j])
+
+
+        for pos in casillas:
+            player = self.board[pos[0]][pos[1]]
+            
+            self.fix_spot(pos[0],pos[1],'X',False)
+
+            cadena = ""
+            for fila in self.board:
+                for columna in fila:
+                    cadena += columna
+            resultado.append(cadena)
+
+            self.fix_spot(pos[0],pos[1],'-',False)
+
+            player = self.board[pos[0]][pos[1]]
+            
+            self.fix_spot(pos[0],pos[1],'O',False)
+
+            cadena = ""
+            for fila in self.board:
+                for columna in fila:
+                    cadena += columna
+            resultado.append(cadena)
+
+            self.fix_spot(pos[0],pos[1],'-',False)
+            
+            
+
+        return resultado
+
+    def getTableros(self,player):
+        resultado = [[],[]]
+
+        for i in range(3):
+            for j in range(3):
+                if self.board[i][j] == '-':
+                    resultado[0].append([i,j])
+
+        for pos in resultado[0]:
+
+            self.fix_spot(pos[0],pos[1],player,False)
+
+            cadena = ""
+            for fila in self.board:
+                for columna in fila:
+                    cadena += columna
+            resultado[1].append(cadena)
+
+            self.fix_spot(pos[0],pos[1],'-',False)
+
+        return resultado
+    
+    def getPadres(self,tablero):
+
+        indice = 0
+        for casilla in tablero:
+            self.board[indice//3][indice%3]=casilla
+            indice +=1
+
+        resultado = []
+        casillas = []
+
+        for i in range(3):
+            for j in range(3):
+                if self.board[i][j] != "-":
+                    casillas.append([i,j])
+
+
+        for pos in casillas:
+            player = self.board[pos[0]][pos[1]]
+            
+            self.fix_spot(pos[0],pos[1],'-',False)
+
+            cadena = ""
+            for fila in self.board:
+                for columna in fila:
+                    cadena += columna
+            resultado.append(cadena)
+
+            self.fix_spot(pos[0],pos[1],player,False) 
+
+        return resultado 
+
+
+    def is_player_win(self, player):
+        win = None
+
+        n = len(self.board)
+
+        # checking rows
+        for i in range(n):
+            win = True
+            for j in range(n):
+                if self.board[i][j] != player:
+                    win = False
+                    break
+            if win:
+                return win
+
+        # checking columns
+        for i in range(n):
+            win = True
+            for j in range(n):
+                if self.board[j][i] != player:
+                    win = False
+                    break
+            if win:
+                return win
+
+        # checking diagonals
+        win = True
+        for i in range(n):
+            if self.board[i][i] != player:
+                win = False
+                break
+        if win:
+            return win
+
+        win = True
+        for i in range(n):
+            if self.board[i][n - 1 - i] != player:
+                win = False
+                break
+        if win:
+            return win
+        return False
+
+        for row in self.board:
+            for item in row:
+                if item == '-':
+                    return False
         return True
 
-    def simularInsert(self, column, color):
+    def is_board_filled(self):
+        for row in self.board:
+            for item in row:
+                if item == '-':
+                    return False
+        return True
 
-        #copia del tablero
+    def swap_player_turn(self, player):
+        return 'X' if player == 'O' else 'O'
 
-        paso = []
-        for col in self.board:
-            paso.append(col.copy())
+    def show_board(self):
+        for row in self.board:
+            for item in row:
+                print(item, end=" ")
+            print()
 
+    def start(self,ver,a1,a2):
 
-        """Insert the color in the given column."""
-        c = paso[column]
-        if c[0] != NONE:
-            return False
+        self.create_board()
 
-        i = -1
-        while c[i] != NONE:
-            i -= 1
-        c[i] = color
-        
-        return paso
+        player = 'X' if self.get_random_first_player() == 1 else 'O'
 
-    def checkForWin(self):
-        """Check the current board for a winner."""
-        w = self.getWinner()
-        if w:
-            return w
+        while True:
+            if ver:
+                print(f"Player {player} turn")
+            if ver:
+                self.show_board()
 
-    def getWinner(self):
-        """Get the winner on the current board."""
-        lines = (
-            self.board,  # columns
-            zip(*self.board),  # rows
-            # positive diagonals
-            diagonalsPos(self.board, self.cols, self.rows),
-            # negative diagonals
-            diagonalsNeg(self.board, self.cols, self.rows)
-        )
-
-        for line in chain(*lines):
-            for color, group in groupby(line):
-                if color != NONE and len(list(group)) >= self.win:
-                    return color
-
-    def printBoard(self):
-        """Print the board."""
-        print('  '.join(map(str, range(self.cols))))
-        for y in range(self.rows):
-            print('  '.join(str(self.board[x][y]) for x in range(self.cols)))
-        print()
-
-def partidaVer(n, g, agente, agente2):
-
-    paso1 = []
-    for col in g.board:
-        paso1.append(col.copy())
-    g.pasos.append(paso1)
-    turn = RED
-
-    jugar = True
-    while jugar:
-        time.sleep(1)
-        os.system("cls")
-        g.printBoard()
-        colocado = False
-        while not colocado:
-            if turn == YELLOW:
-                row = agente2.politica(g.board)
-                if g.insert(int(row), turn):
-                    colocado = True
+            if player == 'X':
+                if not a1:
+                # taking user input
+                    row, col = list(
+                        map(int, input("Enter row and column numbers to fix spot: ").split()))
+                    print()
+                    # fixing the spot
+                    self.fix_spot(row - 1, col - 1, player,True)
+                else:
+                    row,col = a1.politica()
+                    self.fix_spot(row , col , player,True)
+                    if ver:
+                        time.sleep(2)
             else:
-                row = agente.politica(g.board)
-                if g.insert(int(row), turn):
-                    colocado = True
-        turn = YELLOW if turn == RED else RED
-        if g.checkForWin():
-            os.system("cls")
-            g.printBoard()
-            print("Ha ganado ", g.checkForWin())
-            g.setGanador(g.checkForWin())
-            jugar = False
-        else:
-            huecos = 0
-            for fila in g.board:
-                huecos += fila.count(NONE)
-            if huecos == 0:
-                print("Empate")
-                g.setGanador('.')
-                jugar = False
+                if not a2:
+                # taking user input
+                    row, col = list(
+                        map(int, input("Enter row and column numbers to fix spot: ").split()))
+                    print()
+                    # fixing the spot
+                    self.fix_spot(row - 1, col - 1, player,True)
+                else:
+                    row,col = a2.politica()
+                    self.fix_spot(row , col , player,True)
+                    if ver:
+                        time.sleep(2)
 
-def partida3(n, g, agente, agente2):
+            # checking whether current player is won or not
+            if self.is_player_win(player):
+                if not a1 and not a2:
+                    if ver:
+                        print(f"Player {player} wins the game!")
+                        break                        
+                else:
+                    if ver:
+                        print(f"Player {player} wins the game!")
+                        self.show_board()
+                    return (player,copy.deepcopy(self.pasos))
+            
+            
 
-    paso1 = []
-    for col in g.board:
-        paso1.append(col.copy())
-    g.pasos.append(paso1)
-    turn = RED
+            # checking whether the game is draw or not
+            if self.is_board_filled():
+                if not a1 and not a2:
+                    if ver:
+                        print("Match Draw!")
+                        break
+                else:
+                    if ver:
+                        print("Match Draw!")
+                        self.show_board()
+                    return ("-",copy.deepcopy(self.pasos))
 
-    jugar = True
-    while jugar:
-        #g.printBoard()
-        colocado = False
-        while not colocado:
-            if turn == YELLOW:
-                row = agente2.politica(g.board)
-                if g.insert(int(row), turn):
-                    colocado = True
-            else:
-                row = agente.politica(g.board)
-                if g.insert(int(row), turn):
-                    colocado = True
-        turn = YELLOW if turn == RED else RED
-        if g.checkForWin():
-            #print("Ha ganado ", g.checkForWin())
-            g.setGanador(g.checkForWin())
-            jugar = False
-        else:
-            huecos = 0
-            for fila in g.board:
-                huecos += fila.count(NONE)
-            if huecos == 0:
-                #print("Empate")
-                g.setGanador('.')
-                jugar = False
+            # swapping the turn
+            player = self.swap_player_turn(player)
 
-def partida4(n, g, agente):
-
-    paso1 = []
-    for col in g.board:
-        paso1.append(col.copy())
-    g.pasos.append(paso1)
-    turn = RED
-
-    jugar = True
-    while jugar:
-        g.printBoard()
-        colocado = False
-        while not colocado:
-            if turn == YELLOW:
-                row = input('{}\'s turn: '.format(
-                    'Red' if turn == RED else 'Yellow'))
-                if g.insert(int(row), turn):
-                    colocado = True
-            else:
-                row = agente.politica_trucada()
-                if g.insert(int(row), turn):
-                    colocado = True
-        turn = YELLOW if turn == RED else RED
-        if g.checkForWin():
-            print("Ha ganado ", g.checkForWin())
-            g.printBoard()
-            g.setGanador(g.checkForWin())
-            jugar = False
-        else:
-            huecos = 0
-            for fila in g.board:
-                huecos += fila.count(NONE)
-            if huecos == 0:
-                print("Empate")
-                g.setGanador('.')
-                jugar = False
-
-def partida2(n, g, agente):
-
-    paso1 = []
-    for col in g.board:
-        paso1.append(col.copy())
-        print(g.board)
-    g.pasos.append(paso1)
-    turn = RED
-
-    jugar = True
-    while jugar:
-        g.printBoard()
-        colocado = False
-        while not colocado:
-            if turn == RED:
-                row = input('{}\'s turn: '.format(
-                    'Red' if turn == RED else 'Yellow'))
-                if g.insert(int(row), turn):
-                    colocado = True
-            else:
-                row = agente.politica(g.board)
-                if g.insert(int(row), turn):
-                    colocado = True
-        turn = YELLOW if turn == RED else RED
-        if g.checkForWin():
-            print("Ha ganado ", g.checkForWin())
-            g.printBoard()
-            g.setGanador(g.checkForWin())
-            jugar = False
-        else:
-            huecos = 0
-            for fila in g.board:
-                huecos += fila.count(NONE)
-            if huecos == 0:
-                print("Empate")
-                g.setGanador('.')
-                jugar = False
-
-def partida(n, g):
-
-    paso1 = []
-    for col in g.board:
-        paso1.append(col.copy())
-    g.pasos.append(paso1)
-    turn = RED
-    jugar = True
-    while jugar:
-        g.printBoard()
-        colocado = False
-        while not colocado:
-            row = input('{}\'s turn: '.format(
-                'Red' if turn == RED else 'Yellow'))
-            if g.insert(int(row), turn):
-                colocado = True
-        turn = YELLOW if turn == RED else RED
-        if g.checkForWin():
-            print("Ha ganado ", g.checkForWin())
-            g.setGanador(g.checkForWin())
-            jugar = False
-        else:
-            huecos = 0
-            for fila in g.board:
-                huecos += fila.count(NONE)
-            if huecos == 0:
-                print("Empate")
-                g.setGanador('.')
-                jugar = False
-    
-
-
-
-
-
-
-if __name__ == '__main__':
-    g = Game()
-    turn = RED
-    jugar = True
-    while jugar:
-        g.printBoard()
-        colocado = False
-        while not colocado:
-            row = input('{}\'s turn: '.format(
-                'Red' if turn == RED else 'Yellow'))
-            if g.insert(int(row), turn):
-                colocado = True
-        turn = YELLOW if turn == RED else RED
-        if g.checkForWin():
-            print("Ha ganado ", g.checkForWin())
-            jugar = False
+        # showing the final view of board
+        if ver:
+            print()
+            self.show_board()
+        return ("-",copy.deepcopy(self.pasos))

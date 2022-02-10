@@ -1,382 +1,184 @@
 
 from itertools import groupby, chain
+from juego import TicTacToe
 import math
 import pickle
 import random
-from mega import Mega
-import threading
-from os import remove
+import numpy
+from numpy.random import choice
 import sys
+from mega import Mega
 
 NONE = '.'
+FILAS = 3
+COLUMNAS = 3
 
-parametro_r = [0.7]
-parametro_v = [0.5]
-parametro_E = [0.8]
-iteracion = [0]
+r = 0.8
+v = 0.5
+e = 0.5
+t = 1
 
 mega = Mega()
 m = mega.login("albertovicentedelegido@gmail.com", "USOCw8KsCIO")
 
-
 class agente:
 
-    def __init__(self,color):
-        self.estados = []
-        self.generacion_max = [0]
-        self.parametro_r = parametro_r
-        self.parametro_v = parametro_v
-        self.parametro_E = parametro_E
-        self.iteracion = iteracion
-        self.color = color
+    def __init__(self, player, juego):
 
+        self.estados = dict()
+        self.player = player
+        self.juego = juego
+        self.iteracion = 0
 
-    def hilos(self):
-        cero = estados[0]
-        hijos = cero.gethijos()
+    def guardar(self, archivo):
 
-    def guardar(self,name): 
-        
-        archivo = open(name+'.pickle','wb')
-        array = [self.iteracion,self.estados]
+        archivo = open(archivo+'.pickle', 'wb')
+        array = [self.player, self.estados,self.iteracion]
         sys.setrecursionlimit(100000)
-        pickle.dump(array,archivo)
+        pickle.dump(array, archivo)
         file = m.upload(name+'.pickle')
         print(m.get_upload_link(file))
         archivo.close()
 
-    def actualizarQs(self):
-        self.estados[0].setQ()
+    def cargar(self, archivostr):
 
-    def cargar(self,archivo):
-        name = archivo
-        archivo = open(archivo+'.pickle','rb')
+        archivo = open(archivostr+'.pickle', 'rb')
         array = pickle.load(archivo)
-        self.iteracion = array[0] 
+        self.player = array[0]
         self.estados = array[1]
-        archivo.close()
-        remove(name+'.pickle')
-    
-    def existe(self,tablero):
-        for estado in self.estados:
-            if tablero == estado.tablero:
-                return estado
-        return False
-    
-    def existen(self,estados_nuevos): #DEVUELVE UNA LISTA DE ESTADOS FORMADA POR LOS QUE ENTRAN Y NO EXISTEN Y LOS QUE EXISTEN SE SUSTITUYEN POR EL YA CREADO ANTERIORMENTE
+        self.iteracion = array[2]
+        print("Agente " + archivostr + "cargado")
+        print(self.iteracion)
 
-        #GUARDAMOS LOS TABLEROS DE LOS NUEVOS ESTADOS
-        tableros = []
-        esta = []
+    def setEstados(self, pasos, ganador):
+        indice = 1
+        for estado in pasos:
 
-        for e in estados_nuevos:
-            tableros.append(e.tablero)
-            esta.append(False)
-
-
-        
-        #MIRAMOS QUE TABLEROS ESTAN EN LOS ESTADOS YA GUARDADOS Y LO REPRESENTAMOS EN UN ARRAY CON TRUE SI ESTA Y FALSE SI NO
-        for estado in self.estados:
-            if estado.tablero in tableros:
-                #LO BUSCAMOS EN LOS ESTADOSNUEVOS
-                indice = tableros.index(estado.tablero)
-                #LO INTERCAMBIAMOS POR EL ESTADO NUEVO QUE COINCIDE
-                estados_nuevos[indice] = estado
-                esta[indice]=True
-        
-        return esta
-                
-    def actualizar(self, pasos, recompensa):
-
-        lista = []
-
-        g = 0
-
-        
-        #GENERAMOS LOS OBJETOS ESTADO PARA CADA PASO DE LA PARTIDA
-
-        for tablero in pasos:
-
-            estado = Estado(tablero, g,self.estados)
-            g += 1
-            lista.append(estado)
-
-        lista.reverse()
-
-        #VEMOS QUE ESTADOS EXISTEN Y CUALES NO
-        booleanos = self.existen(lista)
-
-        #GUARDAMOS LOS ESTADOS QUE NO EXISTEN EN LA LISTA AÑADIR
-
-        añadir = []
-
-        for i in range(len(lista)):
-            if i < len(lista) - 1:
-
-
-
-
-                if booleanos[i]==False:
-
-
-                    lista[i].setPadre(lista[i + 1])
-                    lista[i + 1].setHijo(lista[i])
-
-
-                    añadir.append(lista[i])
-                    #SI EL SIGUIENTE ESTADO YA EXISTE (QUE EN ESTE CASO ES EL ANTERIOR EN LA LISTA PORQUE ESTA DEL REVES) TENEMOS QUE INDICAR QUE ES HIJO
-                    if i > 0 :
-                        if booleanos[i-1] == True:
-                            lista[i].setHijo(lista[i-1])
-                            lista[i-1].setPadre(lista[i])
-
+            if indice == len(pasos):
+                if self.estados.get(estado) == None:
+                    if ganador == self.player:
+                        self.estados.setdefault(estado, 10)
+                    elif ganador == "-":
+                        self.estados.setdefault(estado, 0)
+                    else:
+                        self.estados.setdefault(estado, -10)
             else:
-                if booleanos[i]==False:
-                    añadir.append(lista[i])
+                if self.estados.get(estado) == None:
+                    self.estados.setdefault(estado, 0)
 
+            indice += 1
 
-        lista[0].q = recompensa
+    def politica(self):
 
-        añadir.reverse()
+        acciones, tableros = self.juego.getTableros("X")
 
-        for estado in añadir:
-            self.estados.append(estado)
+        # Sacamos las Qs de los tableros
 
-        self.estados[0].setQ()
+        qs = []
 
-
-
-        if self.generacion_max[0] < lista[0].generacion:
-            self.generacion_max[0] = lista[0].generacion
-
-
-
-
-
-
-    def recompensa(self,ganador ):
-        if ganador == self.color:
-            return 1
-        elif ganador == '.':
-            return 0.1
-        else:
-            return -1
-
-    def politica_trucada(self):
-
-        turn = self.color
-
-        row = input('{}\'s turn: '.format(
-                    'Red' if turn == 'R' else 'Yellow'))
-        return row
-
-    def politica(self,t):
-
-        lista  = [] #LISTA DE ESTADOS
-
-        acciones = [] #LISTA DE CASILLAS DONDE SE PUEDE COLOCAR
-        i = 0
-        for columna in t: #AÑADIMOS A ACCIONES EL NUMERO DE COLUMNA DE AQUELLAS QUE TENGAN HUECOS LIBRES
-            if columna.count('.') > 0:
-                acciones.append(i)
-            i+=1
-    
-
-        estados_acciones = [] #lista de tableros que generarian las acciones posibles
-
-        for a in acciones: #guardamos los tableros generados
-            estados_acciones.append(self.simularInsert(t,a))
-        
-
-        #añadimos los estados sin actualizar q
-
-        g = 0
-
-        for tablero in estados_acciones: #guardamos en la lista los estados generados por los tableros
-
-            estado = Estado(tablero, g,self.estados)
-            g += 1
-            lista.append(estado)
-
-        lista.reverse()
-
-        estado = self.existe(t) #guardamos si existe el estado actual, sino lo generamos en el siguiente if
-
-        if not estado:
-            
-            estado = Estado(t, g,self.estados)
-
-        #Sacamos los hijos del estado
-
-        hs = estado.getHijos()
-            
-
-
-        iterador = iter(hs)
-
-        hijos = []
- 
-        for e in lista: #Por cada estado de la lista de acciones
-            guardar = True
-            for h in hs: #por cada hijo ya existente
-                if e.tablero == h.tablero: #Si el hijo coincide con el estado de acciones
-                    guardar = False #No se guarda el estado de acciones
-            if guardar:
-                hijos.append(e)
+        for tablero in tableros:
+            if self.estados.get(tablero) == None:
+                qs.append(0)
             else:
-                hijos.append(next(iterador)) #Se guarda el hijo ya guardado
+                qs.append(self.estados.get(tablero))
 
-
-        factor = 0.01
+        # Calculo de probabilidades
 
         qtotal = 0
 
-        for hijo in hijos:
-            qtotal += math.e ** (self.parametro_E[0] * self.iteracion[0]* factor * hijo.q)
-        
+        for q in qs:
+            qtotal += math.exp(q*e*t)
+
         probabilidades = []
 
+        for q in qs:
+            probabilidades.append(math.exp(q*e*t)/qtotal)
 
-        t = self.iteracion[0]
+        # Elegimos aleatoriamente la accion
 
-        for hijo in hijos:
-            p = (math.e ** ( self.parametro_E[0] * self.iteracion[0] * factor * hijo.q )) / (qtotal)
-            probabilidades.append(p)
+        indice = choice(len(acciones), 1, p=probabilidades)
 
+        return acciones[indice[0]]
 
-        #Elegimos un hijo al azar
-
-        elegido = random.choices(acciones,weights = probabilidades)
-
-        indice = acciones.index(elegido[0])
-
-        #print("Q DEL ESTADO ELEGIDO: ",hijos[indice].q)
-        
-
-        return elegido[0]
-
-    def simularInsert(self, tablero , column):
-
-        #copia del tablero
-
-        paso = []
-        for col in tablero:
-            paso.append(col.copy())
-
-
-        """Insert the color in the given column."""
-        c = paso[column]
-        if c[0] != NONE:
-            return False
-
-        i = -1
-        while c[i] != NONE:
-            i -= 1
-        c[i] = self.color
-        
-        return paso
-
-
-class Estado:
-
-    def __init__(self, tablero, g,estados):
-        self.padres = []
-        self.tablero = tablero
-        self.q = 0
-        self.generacion = g
-        self.estados = estados
-        self.hijos = []
-        self.cambios = False
-
-    def arbolgenealogico(self):
-        res = 0
-        res += self.countHijos()
-        for h in self.hijos:
-            res+=h.arbolgenealogico()
-        return res
-
-    def setPadre(self, padre):
-        self.padres.append(padre)
-        padre.setHijo(self)
-
-    def setHijo(self,hijo):
-        self.hijos.append(hijo)
-        self.cambiar()
-
-    def cambiar(self):
-        self.cambios = True
-        for padre in self.padres:
-            padre.cambiar()
     
-    def imprimir(self):
-        print()
-        print()
-        tablero = self.tablero
-        print("Estado:")
-        print('  '.join(map(str, range(7))))
-        for y in range(6):
-            print('  '.join(str(tablero[x][y]) for x in range(7)))
-        print()
-        print("------------------")
-        if self.padre:
-            print("Padre:")
-            tablero = self.padre.tablero
-            print('  '.join(map(str, range(7))))
-            for y in range(6):
-                print('  '.join(str(tablero[x][y]) for x in range(7)))
-            print()
-            print("------------------")
-        if self.countHijos() > 0:
-            for hijo in self.hijos:
-                print("Hijo:")
-                tablero = hijo.tablero
-                print('  '.join(map(str, range(7))))
-                for y in range(6):
-                    print('  '.join(str(tablero[x][y]) for x in range(7)))
-                print()
-                print("------------------")
+    def actualizarPadres(self,paso):
 
-        print("VALOR DE Q: ",self.q)
-
-    def getHijos(self):
-        return self.hijos
+        # sacamos los padres del paso final
+        padres = self.juego.getPadres(paso)
 
 
-    def countHijos(self):
+        for padre in padres: #A cada padre
 
-        return len(self.getHijos())
+            # Hay que ver si esta guardado, en caso contrario no se sigue por ese camino
 
-    def setQ(self):
+            q = self.estados.get(padre)
 
-        #print("calculando Q de generacion: " , self.generacion)
-        if self.cambios:
-            hijos = self.getHijos()
-            if (len(hijos) > 0):
+            if q != None: #Verificamos si existe el padre en la lista estados
 
+                hijos = self.juego.getHijos(padre)
+                
+                qs = []
 
-                hijos[0].setQ()
+                # guardamos la q de cada hijo
 
-                q_hijos = hijos[0].q
                 for hijo in hijos:
+
+                    qhijo = self.estados.get(hijo)
                     
-                    hijo.setQ()
-                    q_h = hijo.q
-                    if q_hijos < q_h:
-                        q_hijos = q_h
+                    if qhijo != None:
 
-                self.q = self.q  * (1-parametro_v[0]) + parametro_v[0] * (q_hijos * parametro_r[0])
-            self.cambios=False
+                        qs.append(qhijo)
+                # sacamos la Q maxima de los hijos
 
+                qmax = max(qs)
+                # sacamos la nueva q del estado
 
-
-
+                nuevaq = (1-v) * q + v * r * qmax
 
 
+                # actualizamos la q del padre actual
+
+                dic = {padre : nuevaq}
+                self.estados.update(dic)
+    def actualizar(self, pasos,ganador):
+
+        # guardamos los pasos
+        self.setEstados(pasos,ganador)
+
+        #actualizamos los padres del paso final
+        self.actualizarPadres(pasos[len(pasos)-1])
+
+        #sacamos los padres
+        padres = self.juego.getPadres(pasos[len(pasos)-1])
+
+        for i in range(len(pasos)-1): #por cada nivel de profundidad por encima del paso final
+            #aqui guardaremos la siguiente generacion
+            abuelos = []
 
 
-   
+
+            for padre in padres:
+
+                q = self.estados.get(padre)
+
+                if q != None: #Verificamos si existe el padre en la lista estados
+
+
+                    #actualizamos sus padres
+                    self.actualizarPadres(padre)
+
+                    #guardamos sus padres en abuelos
+                    abuelos+=self.juego.getPadres(padre)
+
+            
+            padres = abuelos
+
+        self.iteracion +=1
 
 
 
 
 
+        
+        
+            
