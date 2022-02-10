@@ -30,9 +30,9 @@ class agente:
         self.juego = juego
         self.iteracion = 0
 
-    def guardar(self, archivo):
+    def guardar(self, name):
 
-        archivo = open(archivo+'.pickle', 'wb')
+        archivo = open(name+'.pickle', 'wb')
         array = [self.player, self.estados,self.iteracion]
         sys.setrecursionlimit(100000)
         pickle.dump(array, archivo)
