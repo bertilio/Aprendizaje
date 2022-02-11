@@ -99,9 +99,9 @@ juego = TicTacToe()
 a = agente("X",juego)
 a2 = agente("O",juego)
 
-a.cargar("agenteX1000")
-a2.cargar("agenteO1000")
+a.cargar("agenteX10000")
+a2.cargar("agenteO10000")
 
-entrenar(9000)
+entrenar(40000)
 #partida(True, "1000", "10")
 #partidaEstadistica(1000,False,"1000","10")
