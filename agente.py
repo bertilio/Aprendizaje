@@ -15,7 +15,7 @@ COLUMNAS = 3
 
 r = 0.8
 v = 0.5
-e = 0.5
+e = 0.3
 t = 1
 
 mega = Mega()
@@ -70,7 +70,7 @@ class agente:
 
     def politica(self):
 
-        acciones, tableros = self.juego.getTableros("X")
+        acciones, tableros = self.juego.getTableros(self.player)
 
         # Sacamos las Qs de los tableros
 

@@ -27,7 +27,7 @@ def entrenar(n):
         print("-------------------")
         print("|||||||||||||||||||")
 
-        if (a.iteracion == 10) or (a.iteracion == 100) or (a.iteracion == 1000) or (i == n-1):
+        if (a.iteracion == 10) or (a.iteracion == 100) or (a.iteracion == 1000) or (a.iteracion == 10000) or (i == n-1):
             string = "agenteX"
             string += str(a.iteracion)
             a.guardar(string)
@@ -99,9 +99,9 @@ juego = TicTacToe()
 a = agente("X",juego)
 a2 = agente("O",juego)
 
-a.cargar("agenteX10000")
-a2.cargar("agenteO10000")
+#a.cargar("agenteX10000")
+#a2.cargar("agenteO10000")
 
-entrenar(40000)
+entrenar(50000)
 #partida(True, "1000", "10")
 #partidaEstadistica(1000,False,"1000","10")
