@@ -101,79 +101,36 @@ class agente:
         return acciones[indice[0]]
 
     
-    def actualizarPadres(self,paso):
-
-        # sacamos los padres del paso final
-        padres = self.juego.getPadres(paso)
-
-
-        for padre in padres: #A cada padre
-
-            # Hay que ver si esta guardado, en caso contrario no se sigue por ese camino
-
-            q = self.estados.get(padre)
-
-            if q != None: #Verificamos si existe el padre en la lista estados
-
-                hijos = self.juego.getHijos(padre)
-                
-                qs = []
-
-                # guardamos la q de cada hijo
-
-                for hijo in hijos:
-
-                    qhijo = self.estados.get(hijo)
-                    
-                    if qhijo != None:
-
-                        qs.append(qhijo)
-                # sacamos la Q maxima de los hijos
-
-                qmax = max(qs)
-                # sacamos la nueva q del estado
-
-                nuevaq = (1-v) * q + v * r * qmax
-
-
-                # actualizamos la q del padre actual
-
-                dic = {padre : nuevaq}
-                self.estados.update(dic)
-    def actualizar(self, pasos,ganador):
+    def actualizar(self, pasos, ganador):
 
         # guardamos los pasos
-        self.setEstados(pasos,ganador)
+        self.setEstados(pasos, ganador)
 
-        #actualizamos los padres del paso final
-        self.actualizarPadres(pasos[len(pasos)-1])
+        primero = True
 
-        #sacamos los padres
-        padres = self.juego.getPadres(pasos[len(pasos)-1])
+        pasos.reverse()
 
-        for i in range(len(pasos)-1): #por cada nivel de profundidad por encima del paso final
-            #aqui guardaremos la siguiente generacion
-            abuelos = []
+        indice = 0
 
+        for paso in pasos:
 
+            q = self.estados.get(paso)
 
-            for padre in padres:
+            if not primero:
 
-                q = self.estados.get(padre)
+                #calculo nueva q
 
-                if q != None: #Verificamos si existe el padre en la lista estados
+                nuevaq = (1-v) * q + v * r * self.estados.get(pasos[indice-1])
 
+                #actualizamos q
 
-                    #actualizamos sus padres
-                    self.actualizarPadres(padre)
-
-                    #guardamos sus padres en abuelos
-                    abuelos+=self.juego.getPadres(padre)
-
+                dic = {paso: nuevaq}
+                self.estados.update(dic)
             
-            padres = abuelos
+            indice = indice + 1
+            primero = False
 
-        self.iteracion +=1
+        self.iteracion += 1
 
 
 

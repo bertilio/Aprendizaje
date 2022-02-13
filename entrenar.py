@@ -1,6 +1,7 @@
 from itertools import groupby, chain
 from juego import TicTacToe
 from agente import agente
+from red import red
 import math
 import random
 import time
@@ -27,7 +28,7 @@ def entrenar(n):
         print("-------------------")
         print("|||||||||||||||||||")
 
-        if (a.iteracion == 10) or (a.iteracion == 100) or (a.iteracion == 1000) or (a.iteracion == 10000) or (i == n-1):
+        if (a.iteracion == 10) or (a.iteracion == 100) or (a.iteracion == 1000) or (a.iteracion == 10000) or (a.iteracion == 50000) or (a.iteracion == 500000) or (a.iteracion == n):
             string = "agenteX"
             string += str(a.iteracion)
             a.guardar(string)
@@ -45,7 +46,7 @@ def partida(ver, a1, a2):
         a = False
 
     if a2 != "":
-        nombre = "agenteX" + a1
+        nombre = "agenteO" + a2
         aDos = agente("O",juego)
         aDos.cargar(nombre)
     else:
@@ -65,7 +66,7 @@ def partidaEstadistica(n,ver, a1, a2):
         a = False
 
     if a2 != "":
-        nombre = "agenteX" + a1
+        nombre = "agenteO" + a2
         aDos = agente("O",juego)
         aDos.cargar(nombre)
     else:
@@ -99,9 +100,10 @@ juego = TicTacToe()
 a = agente("X",juego)
 a2 = agente("O",juego)
 
-#a.cargar("agenteX10000")
-#a2.cargar("agenteO10000")
+a.cargar("agenteX100000")
+a2.cargar("agenteO100000")
 
-entrenar(50000)
-#partida(True, "1000", "10")
-#partidaEstadistica(1000,False,"1000","10")
+entrenar(1000000)
+#partida(True, "100000", "")
+#partidaEstadistica(1000,False,"100000","10")
+
