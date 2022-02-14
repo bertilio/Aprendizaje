@@ -19,7 +19,7 @@ def entrenar(n):
         a.actualizar(pasos,ganador)
         a2.actualizar(pasos,ganador)
 
-        if(a.iteracion%10000):
+        if(a.iteracion%10000 == 0):
             
             print("-------------------")
             print("partida: " + str(a.iteracion))
@@ -101,8 +101,8 @@ juego = TicTacToe()
 a = agente("X",juego)
 a2 = agente("O",juego)
 
-a.cargar("agenteX100000")
-a2.cargar("agenteO100000")
+#a.cargar("agenteX100000")
+#a2.cargar("agenteO100000")
 
 entrenar(1000000)
 #partida(True, "100000", "")

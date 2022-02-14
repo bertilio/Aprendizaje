@@ -108,26 +108,24 @@ class agente:
 
         primero = True
 
-        pasos.reverse()
+        indice = len(pasos)-1
 
-        indice = 0
+        while indice >= 0 :
 
-        for paso in pasos:
-
-            q = self.estados.get(paso)
+            q = self.estados.get(pasos[indice])
 
             if not primero:
 
                 #calculo nueva q
 
-                nuevaq = (1-v) * q + v * r * self.estados.get(pasos[indice-1])
+                nuevaq = (1-v) * q + v * r * self.estados.get(pasos[indice + 1])
 
                 #actualizamos q
 
-                dic = {paso: nuevaq}
+                dic = {pasos[indice]: nuevaq}
                 self.estados.update(dic)
             
-            indice = indice + 1
+            indice = indice - 1
             primero = False
 
         self.iteracion += 1
