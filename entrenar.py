@@ -96,6 +96,7 @@ def partidaEstadistica(n,ver, a1, a2):
     print("O ha ganado: " + str(ganaO) + "partidas")
     print("Empates: " + str(empate) + "partidas")
 
+print("hola")
 
 juego = TicTacToe()
 a = agente("X",juego)
