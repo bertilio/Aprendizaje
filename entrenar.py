@@ -19,7 +19,14 @@ def entrenar(n):
         a.actualizar(pasos,ganador)
         a2.actualizar(pasos,ganador)
 
-
+        if(a.iteracion%10000):
+            
+            print("-------------------")
+            print("partida: " + str(a.iteracion))
+            print("-------------------")
+            print("estados: " + str(len(a.estados)))
+            print("-------------------")
+            print("|||||||||||||||||||")
 
 
         if (a.iteracion == 10) or (a.iteracion == 100) or (a.iteracion == 1000) or (a.iteracion == 10000) or (a.iteracion == 50000) or (a.iteracion == 500000) or (a.iteracion == n):
