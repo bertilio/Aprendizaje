@@ -1,2 +1,4 @@
 mega.py
 numpy
+tensorflow-cpu
+keras-rl
