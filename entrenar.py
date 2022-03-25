@@ -1,6 +1,5 @@
 from juego import TicTacToe
 from agente import agente
-from agente2 import agente2
 from agente3 import agente3
 import math
 import time
