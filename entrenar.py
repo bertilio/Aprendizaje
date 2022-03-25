@@ -1,47 +1,69 @@
-from itertools import groupby, chain
 from juego import TicTacToe
 from agente import agente
+from agente2 import agente2
+from agente3 import agente3
 import math
-import random
 import time
-import os
 
+import numpy as np
+
+from keras.models import Sequential
+from keras.layers import Dense, Activation, Flatten
+from tensorflow.keras.optimizers import Adam
+
+from rl.agents.dqn import DQNAgent
+from rl.policy import BoltzmannQPolicy
+from rl.memory import SequentialMemory
 
 
 def entrenar(n):
 
+
+    inicio = a.iteracion
+
+    tiempo0 = time.time()
+
     for i in range(n):
+
 
         #partida
         ganador,pasos = juego.start(False, a, a2)
 
        #actualizar tabla q
-        a.actualizar(pasos,ganador)
-        a2.actualizar(pasos,ganador)
+        a.actualizar(ganador)
+        a2.actualizar(ganador)
 
-        if(a.iteracion%10000 == 0):
-            
+        print("-------------------")
+        print("partida: " + str(a.iteracion))
+        print("-------------------")
+        print("|||||||||||||||||||")
+
+        if (i%100 == 0):
+
+            tiempo1 = time.time()
+
+            minutos = (tiempo1 - tiempo0 ) / 60
+
             print("-------------------")
-            print("partida: " + str(a.iteracion))
-            print("-------------------")
-            print("estados: " + str(len(a.estados)))
+            print("Tiempo por 100 partidas: " + str(minutos))
             print("-------------------")
             print("|||||||||||||||||||")
 
+            tiempo0 = time.time()
 
-        if (a.iteracion == 10) or (a.iteracion == 100) or (a.iteracion == 1000) or (a.iteracion == 10000) or (a.iteracion == 50000) or (a.iteracion == 500000) or (a.iteracion == n):
-            string = "agenteX"
+        if (a.iteracion == 250000) or (a.iteracion == 750000) or (a.iteracion == 500000) or (a.iteracion == n + inicio):
+            string = "agente3X"
             string += str(a.iteracion)
             a.guardar(string)
-            string = "agenteO"
+            string = "agente3O"
             string += str(a2.iteracion)
             a2.guardar(string)
 
 def partida(ver, a1, a2):
 
     if a1 != "":
-        nombre = "agenteX" + a1
-        a = agente("X",juego)
+        nombre = "agente2X" + a1
+        a = agente2("X",juego)
         a.cargar(nombre)
     else:
         a = False
@@ -53,15 +75,66 @@ def partida(ver, a1, a2):
     else:
         aDos = False
     
-    ganador,pasos = juego.start(ver, a, aDos)
+    ganador,pasos = juego.startPVP(ver, a, aDos)
 
 def partidaEstadistica(n,ver, a1, a2):
 
 
 
     if a1 != "":
-        nombre = "agenteX" + a1
-        a = agente("X",juego)
+        nombre = "agente3X" + a1
+        a = agente3("X",juego)
+        a.cargar(nombre)
+    else:
+        a = False
+
+    if a2 != "":
+        nombre = "agente3O" + a2
+        aDos = agente3("O",juego)
+        aDos.cargar(nombre)
+    else:
+        aDos = False
+
+    ganaX = 0
+    ganaO = 0
+    empate = 0
+    fallo = 0
+    
+    for i in range(n):
+
+        print("-------------------")
+        print("partida: " + str(i+1))
+        print("-------------------")
+
+        ganador,pasos = juego.startPVPRand(ver, a, aDos)
+
+        if ganador == "X":
+            ganaX +=1
+        elif ganador == "O":
+            ganaO +=1
+        elif ganador == "-":
+            empate +=1
+        else:
+            fallo+=1
+
+
+
+        
+        
+
+    print("X ha ganado: " + str(ganaX) + "partidas")
+    print("O ha ganado: " + str(ganaO) + "partidas")
+    print("Empates: " + str(empate) + "partidas")
+    print("Fallos: " + str(fallo) + "partidas")
+
+
+def partidaEstadistica2(n,ver, a1, a2):
+
+
+
+    if a1 != "":
+        nombre = "agente2X" + a1
+        a = agente3("X",juego)
         a.cargar(nombre)
     else:
         a = False
@@ -83,7 +156,7 @@ def partidaEstadistica(n,ver, a1, a2):
         print("partida: " + str(i+1))
         print("-------------------")
 
-        ganador,pasos = juego.start(ver, a, aDos)
+        ganador,pasos = juego.startPVPRand(ver, a, aDos)
 
         if ganador == "X":
             ganaX +=1
@@ -92,20 +165,40 @@ def partidaEstadistica(n,ver, a1, a2):
         else:
             empate +=1
 
+
+
+        
+        
+
     print("X ha ganado: " + str(ganaX) + "partidas")
     print("O ha ganado: " + str(ganaO) + "partidas")
     print("Empates: " + str(empate) + "partidas")
 
-print("hola")
+
+
+
 
 juego = TicTacToe()
-a = agente("X",juego)
-a2 = agente("O",juego)
+a = agente3("X",juego)
+a2 = agente3("O",juego)
 
-#a.cargar("agenteX100000")
-#a2.cargar("agenteO100000")
+#a.cargar("agente3X400000")
+#a2.cargar("agente3O400000")
 
-entrenar(100000)
-#partida(True, "100000", "")
-#partidaEstadistica(1000,False,"100000","10")
+
+entrenar(1000000)
+#partida(True, "100000" , "80000")
+#partidaEstadistica(100,False,"10","600000")
+#partidaEstadistica2(10000,False,"10","80000")
+
+
+
+
+
+
+
+
+
+
+
 
