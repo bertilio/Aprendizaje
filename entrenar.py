@@ -51,7 +51,7 @@ def entrenar(n):
 
             tiempo0 = time.time()
 
-        if (a.iteracion == 250000) or (a.iteracion == 750000) or (a.iteracion == 500000) or (a.iteracion == n + inicio):
+        if (a.iteracion == 700000) or (a.iteracion == 800000) or (a.iteracion == 900000) or (a.iteracion == 1000000) or (a.iteracion == 1250000) or (a.iteracion == 1500000) or (a.iteracion == 1750000) or (a.iteracion == 2000000) or (a.iteracion == n + inicio):
             string = "agente3X"
             string += str(a.iteracion)
             a.guardar(string)
@@ -182,11 +182,11 @@ juego = TicTacToe()
 a = agente3("X",juego)
 a2 = agente3("O",juego)
 
-#a.cargar("agente3X400000")
-#a2.cargar("agente3O400000")
+a.cargar("agente3X600000")
+a2.cargar("agente3O600000")
 
 
-entrenar(1000000)
+entrenar(1400000)
 #partida(True, "100000" , "80000")
 #partidaEstadistica(100,False,"10","600000")
 #partidaEstadistica2(10000,False,"10","80000")
