@@ -138,7 +138,7 @@ class agente3:
         for hijo in hijos: #por cada hijo 
 
             x = self.juego.convertir(hijo)
-            qs = self.model.predict([[x]])
+            qs = self.model.predict([x])
 
             qhijo = np.max(qs)
 
@@ -222,7 +222,7 @@ class agente3:
 
                 x = jugada[0] #estado
 
-                qs = self.model.predict([[x]])[0] #Predecir qs de las acciones desde el estado
+                qs = self.model.predict([x])[0] #Predecir qs de las acciones desde el estado
 
                 qFutura = jugada[2] + descuento * self.maxQProxima(x) #Valor q futuro
 
@@ -232,7 +232,7 @@ class agente3:
 
                 outputs.append(qs)
 
-            self.model.fit([inputs],[outputs],batch_size=batch,verbose=0, shuffle=True)
+            self.model.fit(np.array(inputs),np.array(outputs),batch_size=batch,verbose=0, shuffle=True)
         else:
         
             indices = np.random.randint(len(self.replay), size=batch)
@@ -245,7 +245,7 @@ class agente3:
 
                 x = jugada[0] #estado
 
-                qs = self.model.predict([[x]])[0] #Predecir qs de las acciones desde el estado
+                qs = self.model.predict([x])[0] #Predecir qs de las acciones desde el estado
 
                 qFutura = jugada[2] + descuento * self.maxQProxima(x) #Valor q futuro
 
@@ -257,6 +257,6 @@ class agente3:
           
 
 
-            self.model.fit([inputs],[outputs],batch_size=batch,verbose=0, shuffle=True)
+            self.model.fit(np.array(inputs),np.array(outputs),batch_size=batch,verbose=0, shuffle=True)
 
         
