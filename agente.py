@@ -6,6 +6,7 @@ import numpy
 from numpy.random import choice
 import sys
 import random
+from mega import Mega
 
 NONE = '.'
 FILAS = 3
@@ -17,6 +18,8 @@ e = 0.15
 t = 1
 qinicial = 6
 
+mega = Mega()
+m = mega.login("albertovicentedelegido@gmail.com", "USOCw8KsCIO")
 
 
 class agente:
@@ -30,11 +33,14 @@ class agente:
 
     def guardar(self, archivo):
 
+        name = archivo
         archivo = open(archivo+'.pickle', 'wb')
         array = [self.player, self.estados, self.iteracion]
         sys.setrecursionlimit(100000)
         pickle.dump(array, archivo)
         archivo.close()
+        file = m.upload(name+'.pickle')
+        print(m.get_upload_link(file))
 
     def cargar(self, archivostr):
 
