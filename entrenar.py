@@ -107,7 +107,7 @@ a2 = agente("O",juego)
 a.cargar("agenteX1000000")
 a2.cargar("agenteO1000000")
 
-entrenar(1)
+entrenar(1000000)
 #partida(True, "" , "500000")
 #partidaEstadistica(100,False,"10","1000000")
 

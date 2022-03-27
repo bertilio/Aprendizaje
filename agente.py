@@ -38,9 +38,9 @@ class agente:
         array = [self.player, self.estados, self.iteracion]
         sys.setrecursionlimit(100000)
         pickle.dump(array, archivo)
-        archivo.close()
         file = m.upload(name+'.pickle')
         print(m.get_upload_link(file))
+        archivo.close()
 
     def cargar(self, archivostr):
 
