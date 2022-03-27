@@ -186,7 +186,7 @@ a.cargar("agente3X600000")
 a2.cargar("agente3O600000")
 
 
-entrenar(1)
+entrenar(100000)
 #partida(True, "100000" , "80000")
 #partidaEstadistica(100,False,"10","600000")
 #partidaEstadistica2(10000,False,"10","80000")
