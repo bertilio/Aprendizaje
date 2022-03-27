@@ -182,8 +182,8 @@ juego = TicTacToe()
 a = agente3("X",juego)
 a2 = agente3("O",juego)
 
-a.cargar("agente3X600000")
-a2.cargar("agente3O600000")
+#a.cargar("agente3X600000")
+#a2.cargar("agente3O600000")
 
 
 entrenar(100000)
