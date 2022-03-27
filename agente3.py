@@ -60,8 +60,8 @@ class agente3:
 
     def guardar(self, archivo):
         name = archivo
-        #archivo = open(archivo+'.pickle', 'wb')
-        #array = [self.player, self.replay, self.iteracion]
+        archivo = open(archivo+'.pickle', 'wb')
+        array = self.iteracion
         #sys.setrecursionlimit(100000)
         #pickle.dump(array, archivo)
         #archivo.close()
@@ -70,11 +70,11 @@ class agente3:
         print(m.get_upload_link(file))
 
     def cargar(self, archivostr):
-        #archivo = open(archivostr+'.pickle', 'rb')
-        #array = pickle.load(archivo)
+        archivo = open(archivostr+'.pickle', 'rb')
+        array = pickle.load(archivo)
         #self.player = array[0]
         #self.replay = array[1]
-        #self.iteracion = array[2]
+        self.iteracion = array
         self.model.load_weights(archivostr+'.h5')
         self.model2.load_weights(archivostr+'.h5')
         print("Agente " + archivostr + " con " + str(len(self.replay)) +
