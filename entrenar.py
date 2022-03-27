@@ -6,7 +6,7 @@ import math
 
 def entrenar(n):
 
-    inicio = a.iteracion
+    inicio = a.iteracion 
 
     for i in range(n):
 
@@ -25,7 +25,7 @@ def entrenar(n):
         print("-------------------")
         print("|||||||||||||||||||")
 
-        if (a.iteracion == 1250000) or (a.iteracion == 1500000) or (a.iteracion == 1750000) or (a.iteracion == inicio):
+        if (a.iteracion == 1250000) or (a.iteracion == 1500000) or (a.iteracion == 1750000) or (a.iteracion == inicio + n + 1):
             string = "agenteX"
             string += str(a.iteracion)
             a.guardar(string)
