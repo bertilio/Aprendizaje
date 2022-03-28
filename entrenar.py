@@ -25,7 +25,7 @@ def entrenar(n):
         print("-------------------")
         print("|||||||||||||||||||")
 
-        if (a.iteracion == 3000000) or (a.iteracion == 4000000) or (a.iteracion == 5000000) or (a.iteracion == 6000000) or (a.iteracion == 7000000) or (a.iteracion == 8000000) or (a.iteracion == 9000000) or (a.iteracion == inicio + n):
+        if (a.iteracion == 20000000) or (a.iteracion == 30000000) or (a.iteracion == 40000000) or (a.iteracion == 50000000) or (a.iteracion == 60000000) or (a.iteracion == 70000000) or (a.iteracion == 80000000) or (a.iteracion == 90000000) or (a.iteracion == inicio + n):
             string = "agenteX"
             string += str(a.iteracion)
             a.guardar(string)
