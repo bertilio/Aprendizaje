@@ -25,7 +25,7 @@ def entrenar(n):
         print("-------------------")
         print("|||||||||||||||||||")
 
-        if (a.iteracion == 1250000) or (a.iteracion == 1500000) or (a.iteracion == 1750000) or (a.iteracion == inicio + n):
+        if (a.iteracion == 3000000) or (a.iteracion == 4000000) or (a.iteracion == 5000000) or (a.iteracion == 6000000) or (a.iteracion == 7000000) or (a.iteracion == 8000000) or (a.iteracion == 9000000) or (a.iteracion == inicio + n):
             string = "agenteX"
             string += str(a.iteracion)
             a.guardar(string)
@@ -104,10 +104,10 @@ a2 = agente("O",juego)
 
 
 
-a.cargar("agenteX1000000")
-a2.cargar("agenteO1000000")
+a.cargar("agenteX2000000")
+a2.cargar("agenteO2000000")
 
-entrenar(1000000)
+entrenar(8000000)
 #partida(True, "" , "500000")
 #partidaEstadistica(100,False,"10","1000000")
 
