@@ -104,10 +104,10 @@ a2 = agente("O",juego)
 
 
 
-a.cargar("agenteX2000000")
-a2.cargar("agenteO2000000")
+a.cargar("agenteX10000000")
+a2.cargar("agenteO10000000")
 
-entrenar(8000000)
+entrenar(90000000)
 #partida(True, "" , "500000")
 #partidaEstadistica(100,False,"10","1000000")
 
