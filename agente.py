@@ -14,10 +14,9 @@ COLUMNAS = 3
 
 descuento = 0.68
 alfa = 0.25
-e = 0.15
+e = 0.1
 t = 1
 qinicial = 6
-
 mega = Mega()
 m = mega.login("albertovicentedelegido@gmail.com", "USOCw8KsCIO")
 
