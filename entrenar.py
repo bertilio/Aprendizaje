@@ -104,8 +104,8 @@ a2 = agente("O",juego)
 
 
 
-a.cargar("agenteX10000000")
-a2.cargar("agenteO10000000")
+a.cargar("agenteX1000000")
+a2.cargar("agenteO1000000")
 
 entrenar(2000000,[10,8000,9000,10000,30000,50000,80000,100000,1000000,3000000,5000000])
 #partida(True, "" , "500000")
