@@ -207,14 +207,14 @@ class agente:
 
             
 
-            if not primero:
+            if not primero: #Si no es el primero
 
                 #calculo nueva q
 
                 nuevaq = (1-alfa) * q + alfa* (recompensa + descuento * self.maxQProxima(propios[indice]))
 
                 #actualizamos q
-                recompensa = nuevaq
+                recompensa = 0
                 dic = {propios[indice]: nuevaq}
                 self.estados.update(dic)
             else:
@@ -222,7 +222,7 @@ class agente:
                 #calculo nueva q
 
                 nuevaq = recompensa
-                
+                recompensa = 0
                 #actualizamos q
                 dic = {propios[indice]: nuevaq}
                 self.estados.update(dic)
