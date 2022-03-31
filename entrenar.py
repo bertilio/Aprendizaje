@@ -17,13 +17,14 @@ def entrenar(n,guardar):
         a.actualizar(pasos,ganador)
         a2.actualizar(pasos,ganador)
 
+        if (a.iteracion%10 == 0):
 
-        print("-------------------")
-        print("partida: " + str(a.iteracion))
-        print("-------------------")
-        print("estados: " + str(len(a.estados)))
-        print("-------------------")
-        print("|||||||||||||||||||")
+            print("-------------------")
+            print("partida: " + str(a.iteracion))
+            print("-------------------")
+            print("estados: " + str(len(a.estados)))
+            print("-------------------")
+            print("|||||||||||||||||||")
 
         if (a.iteracion in guardar) or (a.iteracion == inicio + n):
             string = "agenteX"

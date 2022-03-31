@@ -12,7 +12,7 @@ NONE = '.'
 FILAS = 3
 COLUMNAS = 3
 
-descuento = 0.68
+descuento = 0.4
 alfa = 0.25
 e = 0.5
 t = 1
