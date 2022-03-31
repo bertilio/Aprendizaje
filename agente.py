@@ -14,7 +14,7 @@ COLUMNAS = 3
 
 descuento = 0.68
 alfa = 0.25
-e = 0.15
+e = 0.5
 t = 1
 qinicial = 6
 mega = Mega()
