@@ -25,7 +25,7 @@ def entrenar(n,guardar):
             recompensas += -10
         
         media = recompensas / (a.iteracion + 1)
-
+        #oye
        #actualizar tabla q
         a.actualizar(pasos,ganador)
         a2.actualizar(pasos,ganador)
