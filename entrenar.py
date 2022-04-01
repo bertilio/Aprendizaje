@@ -17,7 +17,7 @@ def entrenar(n,guardar):
         a.actualizar(pasos,ganador)
         a2.actualizar(pasos,ganador)
 
-        if (a.iteracion%10 == 0):
+        if (a.iteracion%1000 == 0):
 
             print("-------------------")
             print("partida: " + str(a.iteracion))
