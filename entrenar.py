@@ -6,12 +6,25 @@ import math
 
 def entrenar(n,guardar):
 
+    recompensas = 0
+
     inicio = a.iteracion 
 
     for i in range(n):
 
         #partida
         ganador,pasos = juego.start(False, a, a2)
+
+        if ganador == "X":
+            recompensas += 0
+        elif ganador == "O":
+            recompensas += 10
+        elif ganador == "-":
+            recompensas += 5
+        else:
+            recompensas += -10
+        
+        media = recompensas / (a.iteracion + 1)
 
        #actualizar tabla q
         a.actualizar(pasos,ganador)
@@ -23,6 +36,8 @@ def entrenar(n,guardar):
             print("partida: " + str(a.iteracion))
             print("-------------------")
             print("estados: " + str(len(a.estados)))
+            print("-------------------")
+            print("Recompensa Media: " + str(media))
             print("-------------------")
             print("|||||||||||||||||||")
 
