@@ -193,6 +193,18 @@ class agente:
         elif ganador == "-":
 
             recompensa = 5
+        
+        elif self.player == "X":
+
+            if ganador == "O": #Si pierde
+
+                recompensa = -5
+
+        elif self.player == "O":
+
+            if ganador == "X": #Si pierde
+
+                recompensa = -5
 
         # guardamos los pasos
         propios = self.setEstados(pasos)

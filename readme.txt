@@ -1,0 +1,1 @@
+Le meto recompensa de -5 a la derrota pa que le joda de lo lindo perder
